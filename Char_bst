@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+struct Node {
+    char data;
+    Node* left;
+    Node* right;
+};
+Node* createNode(char value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+Node* insert(Node* root, char value) {
+    if (root == NULL) {
+        return createNode(value);
+    }
+    if (value < root->data) {
+        root->left = insert(root->left, value);
+    } else if (value > root->data) {
+        root->right = insert(root->right, value);
+    }
+    return root;
+}
+void printVowels(Node* root) {
+    if (root != NULL) {
+        printVowels(root->left);
+        char ch = root->data;
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' ||
+            ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U') {
+            cout << ch << " ";
+        }
+        printVowels(root->right);
+    }
+}
+int main() {
+    Node* root = NULL;
+    root = insert(root, 'a');
+    insert(root, 'b');
+    insert(root, 'c');
+    insert(root, 'd');
+    insert(root, 'e');
+    insert(root, 'f');
+    insert(root, 'g');
+    cout << "Vowels in the tree are: ";
+    printVowels(root);
+    cout << endl;
+    return 0;
+}

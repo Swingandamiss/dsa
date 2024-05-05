@@ -1,0 +1,56 @@
+#include <iostream>
+#define INF 99999
+#define MAX_VERTICES 100 // Maximum number of vertices in the graph
+using namespace std;
+// Function to perform Floyd Warshall algorithm
+void floydWarshall(int graph[MAX_VERTICES][MAX_VERTICES], int V) {
+    int dist[MAX_VERTICES][MAX_VERTICES];
+    // Initialize distance matrix with graph weights
+    for (int i = 0; i < V; ++i) {
+        for (int j = 0; j < V; ++j) {
+            dist[i][j] = graph[i][j];
+        }
+    }
+    // Update distance matrix by considering all vertices as intermediate nodes
+    for (int k = 0; k < V; ++k) {
+        for (int i = 0; i < V; ++i) {
+            for (int j = 0; j < V; ++j) {
+                if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+    // Output the shortest distances
+    cout << "Shortest distances between every pair of vertices:\n";
+    for (int i = 0; i < V; ++i) {
+        for (int j = 0; j < V; ++j) {
+            if (dist[i][j] == INF)
+                cout << "INF\t";
+            else
+                cout << dist[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+int main() {
+    int V, E; // Number of vertices and edges
+    cout << "Enter number of vertices and edges: ";
+    cin >> V >> E;
+    int graph[MAX_VERTICES][MAX_VERTICES]; // Adjacency matrix representation of the graph
+    // Initialize graph with INF (infinity)
+    for (int i = 0; i < V; ++i) {
+        for (int j = 0; j < V; ++j) {
+            graph[i][j] = (i == j) ? 0 : INF;
+        }
+    }
+    // Input the graph edges
+    cout << "Enter the edges (from to weight):\n";
+    for (int i = 0; i < E; ++i) {
+        int from, to, weight;
+        cin >> from >> to >> weight;
+        graph[from][to] = weight;
+    }
+    floydWarshall(graph, V);
+    return 0;
+}

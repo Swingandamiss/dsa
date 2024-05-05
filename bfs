@@ -1,0 +1,46 @@
+#include <iostream>
+#define MAX_VERTICES 100 // Maximum number of vertices in the graph
+using namespace std;
+// Function to perform Breadth First Search
+void bfs(int graph[MAX_VERTICES][MAX_VERTICES], bool visited[MAX_VERTICES], int V, int start) {
+    int queue[MAX_VERTICES];
+    int front = 0, rear = 0;
+    visited[start] = true;
+    queue[rear++] = start;
+    while (front != rear) {
+        int node = queue[front++];
+        cout << node << " "; // Output the visited node
+        // Traverse all adjacent nodes of the current node
+        for (int i = 0; i < V; ++i) {
+            if (graph[node][i] && !visited[i]) {
+                visited[i] = true;
+                queue[rear++] = i;
+            }
+        }
+    }
+}
+int main() {
+    int V, E; // Number of vertices and edges
+    cout << "Enter number of vertices and edges: ";
+    cin >> V >> E;
+    int graph[MAX_VERTICES][MAX_VERTICES] = {0}; // Adjacency matrix representation of the graph
+    bool visited[MAX_VERTICES] = {false}; // To keep track of visited nodes
+    // Input the graph edges
+    cout << "Enter the edges (from to):\n";
+    for (int i = 0; i < E; ++i) {
+        int from, to;
+        cin >> from >> to;
+        graph[from][to] = 1;
+        // For undirected graph, uncomment the line below
+        // graph[to][from] = 1;
+    }
+    // Perform BFS traversal from each unvisited node
+    cout << "BFS traversal: ";
+    for (int i = 0; i < V; ++i) {
+        if (!visited[i]) {
+            bfs(graph, visited, V, i);
+        }
+    }
+    cout << endl;
+    return 0;
+}

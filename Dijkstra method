@@ -1,0 +1,59 @@
+#include <iostream>
+#define MAX_VERTICES 100 // Maximum number of vertices in the graph
+using namespace std;
+// Structure to represent a graph edge
+struct Edge {
+    int to;
+    int weight;
+};
+// Function to perform Dijkstra's algorithm
+void dijkstra(int graph[MAX_VERTICES][MAX_VERTICES], int V, int start, int dist[MAX_VERTICES]) {
+    bool visited[MAX_VERTICES] = {false}; // To keep track of visited vertices
+    // Initialize distances to infinity
+    for (int i = 0; i < V; ++i) {
+        dist[i] = INT_MAX;
+    }
+    dist[start] = 0; // Distance from start node to itself is 0
+    for (int i = 0; i < V - 1; ++i) {
+        int minDist = INT_MAX, minIndex;
+        // Find the vertex with minimum distance
+        for (int j = 0; j < V; ++j) {
+            if (!visited[j] && dist[j] < minDist) {
+                minDist = dist[j];
+                minIndex = j;
+            }
+        }
+        int u = minIndex;
+        visited[u] = true;
+        // Update distances of adjacent vertices of u
+        for (int v = 0; v < V; ++v) {
+            if (!visited[v] && graph[u][v] && dist[u] != INT_MAX && dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+}
+int main() {
+    int V, E; // Number of vertices and edges
+    cout << "Enter number of vertices and edges: ";
+    cin >> V >> E;
+    int graph[MAX_VERTICES][MAX_VERTICES] = {0}; // Adjacency matrix representation of the graph
+    // Input the graph edges
+    cout << "Enter the edges (from to weight):\n";
+    for (int i = 0; i < E; ++i) {
+        int from, to, weight;
+        cin >> from >> to >> weight;
+        graph[from][to] = weight;
+    }
+    int start; // Starting vertex for Dijkstra's algorithm
+    cout << "Enter the starting vertex: ";
+    cin >> start;
+    int dist[MAX_VERTICES]; // To store the shortest distances from start
+    dijkstra(graph, V, start, dist);
+    // Output the shortest distances from start
+    cout << "Shortest distances from vertex " << start << ":\n";
+    for (int i = 0; i < V; ++i) {
+        cout << "Vertex " << i << ": " << dist[i] << endl;
+    }
+    return 0;
+}
